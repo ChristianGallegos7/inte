@@ -15,6 +15,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contrasena = $_POST['password'];
     $confirmarContrasena = $_POST['confirm_password'];
 
+    if (!filter_var($correo, FILTER_VALIDATE_EMAIL) || !preg_match("/@gmail\.com$/", $correo)) {
+        // El correo electrónico no tiene un formato válido o no es de Gmail
+        // Puedes mostrar un mensaje de error o realizar otras acciones necesarias
+        echo '<div class="registro-message alert" id="mensajeAlerta2" style="display: none;"></div>';
+    } else {
+        // El correo electrónico es válido y es de Gmail, procede con la inserción en la base de datos
+        // ...
+    }
+
     // Verifica si el correo electrónico ya está en uso
     $stmt = $conn->prepare('SELECT email FROM clientes WHERE email = ?');
     $stmt->bind_param('s', $correo);
@@ -69,7 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container-fluid">
         <div class="col-md-4 mx-auto">
             <h2 class="text-center">Registro</h2>
-
+            <!-- Agregar un div para mostrar la alerta -->
+            <div class="registro-message alert" id="mensajeAlerta" style="display: none;"></div>
             <form action="registro.php" method="POST" class="card p-4" id="registroForm">
                 <div class="mb-3">
                     <label for="firstname" class="form-label">Nombre:</label>
@@ -78,8 +88,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Correo electrónico:</label>
-                    <input type="email" id="email" name="email" class="form-control" required>
+                    <input type="email" id="email" name="email" class="form-control" required pattern="[a-zA-Z0-9._%+-]+@gmail\.com">
+                    <small>Ingrese una dirección de correo de Gmail válida.</small>
                 </div>
+
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Contraseña:</label>
@@ -93,15 +105,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="mb-3">
                     <label for="phone" class="form-label">Teléfono:</label>
-                    <input type="text" id="phone" name="phone" class="form-control" required>
+                    <input type="text" id="phone" name="phone" class="form-control" required pattern="[0-9]{1,10}">
+                    <small>Ingrese solo números (máximo 10 dígitos).</small>
                 </div>
+
 
                 <button type="submit" class="btn btn-primary">Registrarse</button>
                 <a href="index.php" class="btn btn-danger mt-3">Cancelar</a>
             </form>
 
-            <!-- Agregar un div para mostrar la alerta -->
-            <div class="registro-message alert" id="mensajeAlerta" style="display: none;"></div>
+
         </div>
     </div>
 
@@ -121,6 +134,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 mensajeAlerta.innerHTML = 'Las contraseñas no coinciden. Inténtalo de nuevo.';
                 mensajeAlerta.className = 'registro-message alert alert-danger';
                 mensajeAlerta.style.display = 'block';
+                setTimeout(function() {
+                    mensajeAlerta.style.display = 'none';
+                }, 2000);
             } else {
                 // Envía el formulario si las contraseñas coinciden
                 this.submit();
