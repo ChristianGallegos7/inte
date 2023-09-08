@@ -64,13 +64,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
 </head>
 
 <body>
+    <style>
+        .tarjeta {
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Ajusta el último valor (alfa) para controlar la transparencia */
+            /* Otros estilos para la tarjeta */
+        }
+
+        .avatar {
+            background-color: white;
+        }
+    </style>
+
     <main class="py-5">
         <div class="container container2 d-flex flex-column align-items-center justify-content-center">
-            <div class="card p-4" style="min-width: 450px;">
+            <div class="tarjeta p-4 text-white" style="min-width: 450px;">
                 <h2 class="text-center">Iniciar sesión</h2>
                 <form method="POST" action="index.php">
                     <div class="form-group">
-                        <label for="email">Correo Electrónico:</label>
+                        <label for="email" class="form-label">Correo Electrónico:</label>
                         <div class="d-flex align-items-center">
                             <input type="email" class="form-control mb-3" name="email" id="username" required>
                             <img src="./images/avatar.png" alt="avatar" class="avatar mb-3 mx-2" width="30px">
