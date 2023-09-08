@@ -58,6 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $mensajeAlerta = 'Registro realizado con éxito';
         $claseAlerta = 'alert-success'; // Cambia la clase a alert-success para alerta verde
+        //al index
+        header('Location: index.php');
+        exit; // Asegúrate de que no se ejecute más código después de la redirección
     }
 }
 ?>
@@ -106,10 +109,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="mb-3">
                     <label for="phone" class="form-label">Teléfono:</label>
                     <input type="text" id="phone" name="phone" class="form-control" required maxlength="10">
-                    <small>Ingrese solo números (máximo 10 dígitos).</small>
+                    <small>Ingrese solo números (máximo 10 dígitos) y comience con cero.</small>
                 </div>
 
-                <!-- JavaScript para permitir solo números -->
+                <!-- JavaScript para permitir solo números, iniciar con cero y evitar secuencias repetitivas -->
                 <script>
                     // Obtén el elemento del campo de teléfono
                     var phoneInput = document.getElementById('phone');
@@ -127,10 +130,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             numericValue = numericValue.slice(0, 10);
                         }
 
+                        // Verifica si el número es una secuencia repetitiva
+                        if (/^0{1}(\d)\1{8}$/.test(numericValue)) {
+                            // Es una secuencia repetitiva, muestra un mensaje de error
+                            this.setCustomValidity('No ingrese una secuencia repetitiva de números (e.g., 0111111111).');
+                        } else {
+                            // No es una secuencia repetitiva, elimina el mensaje de error
+                            this.setCustomValidity('');
+                        }
+
                         // Actualiza el valor del campo con solo números
                         this.value = numericValue;
                     });
                 </script>
+
+
 
 
                 <button type="submit" class="btn btn-primary">Registrarse</button>
