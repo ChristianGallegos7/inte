@@ -17,11 +17,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!filter_var($correo, FILTER_VALIDATE_EMAIL) || !preg_match("/@gmail\.com$/", $correo)) {
         // El correo electrónico no tiene un formato válido o no es de Gmail
-        // Puedes mostrar un mensaje de error o realizar otras acciones necesarias
-        echo '<div class="registro-message alert" id="mensajeAlerta2" style="display: none;"></div>';
-    } else {
-        // El correo electrónico es válido y es de Gmail, procede con la inserción en la base de datos
-        // ...
+        // Configura el mensaje de error en la variable $mensajeAlerta
+        $mensajeAlerta = 'El correo electrónico ingresado no es válido o no es de Gmail.';
+        $claseAlerta = 'alert-danger'; // Cambia la clase a alert-danger para alerta roja
     }
 
     // Verifica si el correo electrónico ya está en uso
@@ -64,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html>
 
@@ -78,8 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container-fluid">
         <div class="col-md-4 mx-auto">
             <h2 class="text-center">Registro</h2>
-            <!-- Agregar un div para mostrar la alerta -->
-            <div class="registro-message alert" id="mensajeAlerta" style="display: none;"></div>
+            <!-- Agregar un div para mostrar la alerta de correo -->
+            <div class="registro-message alert" id="mensajeAlertaCorreo" style="display: none;"></div>
+            <!-- Agregar un div para mostrar la alerta de contraseñas -->
+            <div class="registro-message alert" id="mensajeAlertaContrasenas" style="display: none;"></div>
             <form action="registro.php" method="POST" class="card p-4" id="registroForm">
                 <div class="mb-3">
                     <label for="firstname" class="form-label">Nombre:</label>
@@ -91,7 +92,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="email" id="email" name="email" class="form-control" required pattern="[a-zA-Z0-9._%+-]+@gmail\.com">
                     <small>Ingrese una dirección de correo de Gmail válida.</small>
                 </div>
-
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Contraseña:</label>
@@ -109,12 +109,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <small>Ingrese solo números (máximo 10 dígitos).</small>
                 </div>
 
-
                 <button type="submit" class="btn btn-primary">Registrarse</button>
                 <a href="index.php" class="btn btn-danger mt-3">Cancelar</a>
             </form>
-
-
         </div>
     </div>
 
@@ -123,19 +120,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         document.getElementById('registroForm').addEventListener('submit', function(event) {
             event.preventDefault(); // Evita que el formulario se envíe
 
+            // Obtén el valor del correo
+            var correo = document.getElementById('email').value;
+
+            // Verifica si el correo es válido y cumple con el patrón
+            if (!correo.match(/[a-zA-Z0-9._%+-]+@gmail\.com$/)) {
+                // Muestra el mensaje de alerta de correo en rojo
+                var mensajeAlertaCorreo = document.getElementById('mensajeAlertaCorreo');
+                mensajeAlertaCorreo.innerHTML = 'El correo electrónico ingresado no es válido o no es de Gmail.';
+                mensajeAlertaCorreo.className = 'registro-message alert alert-danger';
+                mensajeAlertaCorreo.style.display = 'block';
+                setTimeout(function() {
+                    mensajeAlertaCorreo.style.display = 'none';
+                }, 2000);
+                return; // Detiene la validación si el correo no es válido
+            }
+
             // Obtén los valores de las contraseñas
             var contrasena = document.getElementById('password').value;
             var confirmarContrasena = document.getElementById('confirm_password').value;
 
             // Verifica si las contraseñas coinciden
             if (contrasena !== confirmarContrasena) {
-                // Muestra el mensaje de alerta en rojo
-                var mensajeAlerta = document.getElementById('mensajeAlerta');
-                mensajeAlerta.innerHTML = 'Las contraseñas no coinciden. Inténtalo de nuevo.';
-                mensajeAlerta.className = 'registro-message alert alert-danger';
-                mensajeAlerta.style.display = 'block';
+                // Muestra el mensaje de alerta de contraseñas en rojo
+                var mensajeAlertaContrasenas = document.getElementById('mensajeAlertaContrasenas');
+                mensajeAlertaContrasenas.innerHTML = 'Las contraseñas no coinciden. Inténtalo de nuevo.';
+                mensajeAlertaContrasenas.className = 'registro-message alert alert-danger';
+                mensajeAlertaContrasenas.style.display = 'block';
                 setTimeout(function() {
-                    mensajeAlerta.style.display = 'none';
+                    mensajeAlertaContrasenas.style.display = 'none';
                 }, 2000);
             } else {
                 // Envía el formulario si las contraseñas coinciden
@@ -143,6 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         });
     </script>
+
 </body>
 
 </html>
