@@ -6,6 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["agregar_empleado"])) {
     $email_empleado = $_POST["email_empleado"];
     $password_empleado = $_POST["password_empleado"];
     $rol_empleado = $_POST["rol_empleado"];
+    $local_empleado = $_POST["local_empleado"];
 
     // Verifica si el correo electrónico del empleado ya está registrado
     $sql = "SELECT * FROM Empleados WHERE email = '$email_empleado'";
@@ -18,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["agregar_empleado"])) {
         $hashed_password = password_hash($password_empleado, PASSWORD_DEFAULT);
 
         // Inserta los datos del nuevo empleado en la tabla Empleados
-        $sql = "INSERT INTO Empleados (nombre, email, password, rol) VALUES ('$nombre_empleado', '$email_empleado', '$hashed_password', '$rol_empleado')";
+        $sql = "INSERT INTO Empleados (nombre, email, password, rol, local_id) VALUES ('$nombre_empleado', '$email_empleado', '$hashed_password', '$rol_empleado', '$local_empleado')";
 
         if ($conn->query($sql) === TRUE) {
             header("Location: ../index.php"); // Redirigir a la página de administración después de agregar el empleado
@@ -47,31 +48,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["agregar_empleado"])) {
     <header>
         <!-- place navbar here -->
     </header>
-    <main>
-        <div class="container">
-            <h2>Agregar Nuevo Empleado</h2>
-            <form method="POST" action="agregar_empleado.php">
-                <div class="mb-3">
-                    <label for="nombre_empleado" class="form-label">Nombre:</label>
-                    <input type="text" class="form-control" name="nombre_empleado" required>
-                </div>
-                <div class="mb-3">
-                    <label for="email_empleado" class="form-label">Correo Electrónico:</label>
-                    <input type="email" class="form-control" name="email_empleado" required>
-                </div>
-                <div class="mb-3">
-                    <label for="password_empleado" class="form-label">Contraseña:</label>
-                    <input type="password" class="form-control" name="password_empleado" required>
-                </div>
-                <div class="mb-3">
-                    <label for="rol_empleado" class="form-label">Rol:</label>
-                    <input type="text" class="form-control" name="rol_empleado" required>
-                </div>
-                <button type="submit" class="btn btn-primary" name="agregar_empleado">Agregar Empleado</button>
-                <a name="" id="" class="btn btn-primary" href="index.php" role="button">Cancelar</a>
-            </form>
-        </div>
+    <main class="container mt-4">
+        <h2>Agregar Nuevo Empleado</h2>
+        <form method="POST" action="agregar_empleado.php">
+            <label for="nombre_empleado">Nombre:</label>
+            <input type="text" name="nombre_empleado" required>
+            <br>
+            <label for="email_empleado">Correo Electrónico:</label>
+            <input type="email" name="email_empleado" required>
+            <br>
+            <label for="password_empleado">Contraseña:</label>
+            <input type="password" name="password_empleado" required>
+            <br>
+            <label for="rol_empleado">Rol:</label>
+            <input type="text" name="rol_empleado" required>
+            <br>
+            <label for="local_empleado">Local:</label>
+            <select name="local_empleado" required>
+                <option value="">Seleccionar Local</option>
+                <?php
+                // Consulta para obtener la lista de locales
+                $queryLocales = "SELECT id_local, Nombre FROM Local";
+                $resultLocales = mysqli_query($conn, $queryLocales);
+
+                // Genera opciones para cada local
+                while ($rowLocal = mysqli_fetch_assoc($resultLocales)) {
+                    echo '<option value="' . $rowLocal["id_local"] . '">' . $rowLocal["Nombre"] . '</option>';
+                }
+                ?>
+            </select>
+            <br>
+            <input type="submit" name="agregar_empleado" value="Agregar Empleado">
+        </form>
     </main>
+
     <footer>
         <!-- place footer here -->
     </footer>
