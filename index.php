@@ -63,16 +63,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     <link rel="stylesheet" href="./css/index.css">
 </head>
 
+<style>
+
+</style>
+
 <body>
+
     <style>
         .tarjeta {
             background-color: rgba(0, 0, 0, 0.7);
             /* Ajusta el último valor (alfa) para controlar la transparencia */
             /* Otros estilos para la tarjeta */
-        }
-
-        .avatar {
-            background-color: white;
         }
     </style>
 

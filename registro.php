@@ -1,70 +1,3 @@
-<style>
-    .registro-message {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        background-color: #008f39;
-        color: white;
-        text-align: center;
-        padding: 10px;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 5px;
-        color: #333;
-        font-weight: bold;
-    }
-
-    select {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border: none;
-        background-color: #F5F5F5;
-        color: #333;
-        border-radius: 3px;
-    }
-
-    option {
-        color: #333;
-    }
-
-    /* Estilos adicionales para hacerlo más colorido */
-
-    label {
-        font-size: 18px;
-    }
-
-    select {
-        font-size: 16px;
-        background-color: #fff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    option:hover {
-        background-color: #FFA500;
-        color: #fff;
-    }
-
-    option:checked {
-        background-color: #FFA500;
-        color: #fff;
-    }
-
-    .cancelar {
-        border: red 2px solid;
-        padding: 7px;
-        background-color: red;
-        color: white;
-        text-decoration: none;
-    }
-
-    .reg {
-        margin-bottom: 10px;
-    }
-</style>
 <?php
 // Importa el archivo de conexión a la base de datos
 require_once 'conexion.php';
@@ -121,31 +54,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <title>Registro</title>
     <link rel="stylesheet" href="reg.css">
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 </head>
 
 <body>
-    <div class="container">
-        <h2>Registro</h2>
+    <div class="container-fluid">
+        <div class="col-md-4 mx-auto">
+            <h2 class="text-center">Registro</h2>
 
-        <form action="registro.php" method="POST">
-            <label for="firstname">Nombre:</label>
-            <input type="text" id="firstname" name="firstname" required>
+            <form action="registro.php" method="POST" class="card p-4">
+                <div class="mb-3">
+                    <label for="firstname" class="form-label">Nombre:</label>
+                    <input type="text" id="firstname" name="firstname" class="form-control" required>
+                </div>
 
-            <label for="email">Correo electrónico:</label>
-            <input type="email" id="email" name="email" required>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo electrónico:</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
 
-            <label for="password">Contraseña:</label>
-            <input type="password" id="password" name="password" required>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña:</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
 
-            <label for="confirm_password">Confirmar contraseña:</label>
-            <input type="password" id="confirm_password" name="confirm_password" required>
+                <div class="mb-3">
+                    <label for="confirm_password" class="form-label">Confirmar contraseña:</label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+                </div>
 
-            <label for="phone">Teléfono:</label>
-            <input type="text" id="phone" name="phone" required>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Teléfono:</label>
+                    <input type="text" id="phone" name="phone" class="form-control" required>
+                </div>
 
-            <input type="submit" value="Registrarse" class="reg">
-            <a name="" id="" class="cancelar" href="index.php" role="button">Cancelar</a>
-        </form>
+                <button type="submit" class="btn btn-primary">Registrarse</button>
+                <a href="index.php" class="btn btn-danger mt-3">Cancelar</a>
+            </form>
+
+        </div>
     </div>
 </body>
 
