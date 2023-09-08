@@ -2,6 +2,10 @@
 // Importa el archivo de conexión a la base de datos
 require_once 'conexion.php';
 
+// Define las variables para el mensaje de alerta y la clase de alerta
+$mensajeAlerta = '';
+$claseAlerta = '';
+
 // Verifica si se envió el formulario de registro
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Obtiene los datos del formulario
@@ -11,9 +15,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contrasena = $_POST['password'];
     $confirmarContrasena = $_POST['confirm_password'];
 
-    // Verifica que las contraseñas coincidan
-    if ($contrasena !== $confirmarContrasena) {
-        echo '<div class="registro-message">Las contraseñas no coinciden. Inténtalo de nuevo.</div>';
+    // Verifica si el correo electrónico ya está en uso
+    $stmt = $conn->prepare('SELECT email FROM clientes WHERE email = ?');
+    $stmt->bind_param('s', $correo);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows > 0) {
+        // El correo electrónico ya está en uso, muestra una alerta
+        $mensajeAlerta = 'El correo electrónico ya está registrado. Inténtalo con otro.';
+        $claseAlerta = 'alert-danger'; // Cambia la clase a alert-danger para alerta roja
+    } elseif ($contrasena !== $confirmarContrasena) {
+        // Verifica que las contraseñas coincidan
+        $mensajeAlerta = 'Las contraseñas no coinciden. Inténtalo de nuevo.';
+        $claseAlerta = 'alert-danger'; // Cambia la clase a alert-danger para alerta roja
     } else {
         // Encripta la contraseña
         $contrasenaEncriptada = password_hash($contrasena, PASSWORD_DEFAULT);
@@ -34,16 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             die('Error al ejecutar la sentencia SQL: ' . $stmt->error);
         }
 
-        echo '<div class="registro-message">Registro realizado con éxito</div>';
-
-        // Redirige al usuario a la página de éxito después de un breve retraso
-        echo <<<EOD
-        <script>
-            setTimeout(function() {
-                window.location.href = 'index.php';
-            }, 1500);
-        </script>
-        EOD;
+        $mensajeAlerta = 'Registro realizado con éxito';
+        $claseAlerta = 'alert-success'; // Cambia la clase a alert-success para alerta verde
     }
 }
 ?>
@@ -63,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="col-md-4 mx-auto">
             <h2 class="text-center">Registro</h2>
 
-            <form action="registro.php" method="POST" class="card p-4">
+            <form action="registro.php" method="POST" class="card p-4" id="registroForm">
                 <div class="mb-3">
                     <label for="firstname" class="form-label">Nombre:</label>
                     <input type="text" id="firstname" name="firstname" class="form-control" required>
@@ -93,8 +100,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a href="index.php" class="btn btn-danger mt-3">Cancelar</a>
             </form>
 
+            <!-- Agregar un div para mostrar la alerta -->
+            <div class="registro-message alert" id="mensajeAlerta" style="display: none;"></div>
         </div>
     </div>
+
+    <!-- JavaScript para validar el formulario -->
+    <script>
+        document.getElementById('registroForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evita que el formulario se envíe
+
+            // Obtén los valores de las contraseñas
+            var contrasena = document.getElementById('password').value;
+            var confirmarContrasena = document.getElementById('confirm_password').value;
+
+            // Verifica si las contraseñas coinciden
+            if (contrasena !== confirmarContrasena) {
+                // Muestra el mensaje de alerta en rojo
+                var mensajeAlerta = document.getElementById('mensajeAlerta');
+                mensajeAlerta.innerHTML = 'Las contraseñas no coinciden. Inténtalo de nuevo.';
+                mensajeAlerta.className = 'registro-message alert alert-danger';
+                mensajeAlerta.style.display = 'block';
+            } else {
+                // Envía el formulario si las contraseñas coinciden
+                this.submit();
+            }
+        });
+    </script>
 </body>
 
 </html>
