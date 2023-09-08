@@ -105,9 +105,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="mb-3">
                     <label for="phone" class="form-label">Teléfono:</label>
-                    <input type="text" id="phone" name="phone" class="form-control" required pattern="[0-9]{1,10}">
+                    <input type="text" id="phone" name="phone" class="form-control" required maxlength="10">
                     <small>Ingrese solo números (máximo 10 dígitos).</small>
                 </div>
+
+                <!-- JavaScript para permitir solo números -->
+                <script>
+                    // Obtén el elemento del campo de teléfono
+                    var phoneInput = document.getElementById('phone');
+
+                    // Agrega un detector de eventos para el evento 'input'
+                    phoneInput.addEventListener('input', function(event) {
+                        // Obtén el valor actual del campo
+                        var phoneValue = this.value;
+
+                        // Remueve cualquier carácter que no sea un número
+                        var numericValue = phoneValue.replace(/\D/g, '');
+
+                        // Limita la longitud a 10 dígitos
+                        if (numericValue.length > 10) {
+                            numericValue = numericValue.slice(0, 10);
+                        }
+
+                        // Actualiza el valor del campo con solo números
+                        this.value = numericValue;
+                    });
+                </script>
+
 
                 <button type="submit" class="btn btn-primary">Registrarse</button>
                 <a href="index.php" class="btn btn-danger mt-3">Cancelar</a>

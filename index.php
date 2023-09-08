@@ -75,10 +75,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
             /* Ajusta el último valor (alfa) para controlar la transparencia */
             /* Otros estilos para la tarjeta */
         }
+
+        .avatar {
+            background-color: white;
+        }
     </style>
 
     <main class="py-5">
         <div class="container container2 d-flex flex-column align-items-center justify-content-center">
+            <h1 class="text-center text-white tarjeta">BIENVENIDO A FOODIES
+                <img src="images/hamburguesa.png" alt="Logo" height="50px">
+
+            </h1>
+
+
             <div class="tarjeta p-4 text-white" style="min-width: 450px;">
                 <h2 class="text-center">Iniciar sesión</h2>
                 <form method="POST" action="index.php">
@@ -102,6 +112,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
                     <input type="submit" class="btn btn-primary btn-block" name="login" value="Iniciar Sesión">
                 </form>
                 <p class="text-center mt-3">¿No tienes una cuenta? <a href="registro.php">Registrarse</a></p>
+                <div class="text-center">
+                    <strong class="">**Solo disponible en ECUADOR<svg width="30px" height="30px" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+                            <path fill="#fcea2b" d="M5 17h62v38H5z" />
+                            <path fill="#d22f27" d="M5 45h62v10H5z" />
+                            <path fill="#1e50a0" d="M5 36h62v9H5z" />
+                            <ellipse cx="36" cy="36" fill="#92d3f5" rx="4.5" ry="6" />
+                            <path fill="#5c9e31" d="M40.5 36c0 3.314-2.015 6-4.5 6s-4.5-2.686-4.5-6Z" />
+                            <path fill="none" stroke="#d22f27" stroke-miterlimit="10" stroke-width="2" d="M36 46v-4" />
+                            <path fill="none" stroke="#f1b31c" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M42.065 42a10.928 10.928 0 0 0 2.435-7v-5H46m-20 0h1.5v5a10.928 10.928 0 0 0 2.435 7" />
+                            <path fill="none" stroke="#6a462f" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M29 26c3.5-1 5.25 0 7 3c1.75-3 3.5-4 7-3" />
+                            <ellipse cx="36" cy="36" fill="none" stroke="#d22f27" stroke-miterlimit="10" stroke-width="2" rx="4.5" ry="6" />
+                            <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 17h62v38H5z" />
+                        </svg>**
+                    </strong>
+                </div>
                 <?php if (isset($error)) { ?>
                     <div id="alert" class="alert alert-danger mt-3">
                         <?php echo $error; ?>
