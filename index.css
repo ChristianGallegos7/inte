@@ -1,12 +1,6 @@
-
-
-.avatar {
-    background-color: white;
-}
-
 body {
     height: 100vh;
-    background-image: url('../images/main.jpg');
+    background-image: url('images/inicio.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -14,8 +8,4 @@ body {
 
 .container2 {
     margin-top: 100px;
-}
-
-.avatar {
-    width: 30px;
 }

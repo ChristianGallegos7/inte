@@ -78,6 +78,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
 
         .avatar {
             background-color: white;
+            width: 30px;
+        }
+
+        body {
+            height: 100vh;
+            background-image: url('images/main.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
         }
     </style>
 
