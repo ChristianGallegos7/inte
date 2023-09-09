@@ -92,7 +92,9 @@
                 <h4> Total: $<span id="cart-total"><?php echo number_format($total, 2); ?></span></h4>
             </div> -->
             <a name="pagar" id="pagar" class="btn btn-primary" href="#" role="button">PAGAR</a>
-            <a name="pagar" id="pagar" class="btn btn-primary" href="local.php" role="button">SEGUIR COMPRANDO</a>
+            <a name="pagar" id="comprar" class="btn btn-primary" href="local.php" role="button">SEGUIR COMPRANDO</a>
+            <button class="btn btn-danger" id="vaciar-carrito">Vaciar Carrito</button>
+
 
         </div>
     </main>
@@ -105,6 +107,53 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const vaciarCarritoButton = document.getElementById('vaciar-carrito');
+            const cartItemsTableBody = document.getElementById('cart-items');
+            const pagarButton = document.getElementById('pagar'); // Agrega esta línea
+
+            // Función para habilitar o deshabilitar el botón "PAGAR"
+            function actualizarEstadoPagarButton() {
+                if (cartItemsTableBody.children.length > 0) {
+                    pagarButton.classList.remove('disabled'); // Habilitar el botón
+                } else {
+                    pagarButton.classList.add('disabled'); // Deshabilitar el botón
+                }
+            }
+
+            // Verificar el estado del carrito al cargar la página
+            actualizarEstadoPagarButton();
+
+            vaciarCarritoButton.addEventListener('click', function() {
+                if (confirm('¿Estás seguro de que deseas vaciar el carrito?')) {
+                    // Vaciar el carrito en el servidor (puedes hacerlo mediante una solicitud AJAX)
+
+                    // Limpiar la tabla de productos en el carrito
+                    while (cartItemsTableBody.firstChild) {
+                        cartItemsTableBody.removeChild(cartItemsTableBody.firstChild);
+                    }
+
+                    // Actualizar el carrito en la sesión (eliminando todos los productos)
+                    fetch('vaciar-carrito.php', {
+                            method: "POST"
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+                            alert('El carrito ha sido vaciado.');
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                        });
+
+                    // Actualizar el estado del botón "PAGAR" después de vaciar el carrito
+                    actualizarEstadoPagarButton();
+                }
+            });
+        });
+    </script>
+
+
 </body>
 
 </html>
