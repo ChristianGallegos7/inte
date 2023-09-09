@@ -92,6 +92,8 @@
                 <h4> Total: $<span id="cart-total"><?php echo number_format($total, 2); ?></span></h4>
             </div> -->
             <a name="pagar" id="pagar" class="btn btn-primary" href="#" role="button">PAGAR</a>
+            <a name="pagar" id="pagar" class="btn btn-primary" href="local.php" role="button">SEGUIR COMPRANDO</a>
+
         </div>
     </main>
     <footer>

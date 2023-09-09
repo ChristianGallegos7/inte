@@ -100,6 +100,7 @@
 
             addToCartButtons.forEach(button => {
                 button.addEventListener("click", function() {
+                    event.preventDefault();
                     const productId = this.getAttribute('data-product-id');
                     const cantidadInput = this.closest('.card-body').querySelector('input[name="cantidad[]"]');
                     const precioInput = this.closest('.card-body').querySelector('input[name="precio[]"]');
@@ -115,27 +116,33 @@
                     console.log("Precio:", precio);
                     console.log("Nombre del producto:", nombre_producto);
 
-                    const formData = new FormData();
-                    formData.append("productId", productId);
-                    formData.append("cantidad", cantidad);
-                    formData.append("precio", precio);
-                    formData.append("nombre_producto", nombre_producto);
+                    // Verificar si la cantidad es mayor que cero antes de agregar al carrito
+                    if (parseInt(cantidad) > 0) {
+                        const formData = new FormData();
+                        formData.append("productId", productId);
+                        formData.append("cantidad", cantidad);
+                        formData.append("precio", precio);
+                        formData.append("nombre_producto", nombre_producto);
 
-                    fetch('add-to-cart.php', {
-                            method: "POST",
-                            body: formData
-                        })
-                        .then(response => response.text())
-                        .then(data => {
-                            alert('Producto agregado al carrito');
-                        })
-                        .catch(error => {
-                            console.error("Error:", error);
-                        });
+                        fetch('add-to-cart.php', {
+                                method: "POST",
+                                body: formData
+                            })
+                            .then(response => response.text())
+                            .then(data => {
+                                alert('Producto agregado al carrito');
+                            })
+                            .catch(error => {
+                                console.error("Error:", error);
+                            });
+                    } else {
+                        alert('Selecciona al menos un producto para agregar al carrito');
+                    }
                 });
             });
         });
     </script>
+
 </body>
 
 </html>
