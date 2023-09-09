@@ -61,7 +61,7 @@ $resultado = mysqli_query($conn, $query);
 
                 <div class="form-group">
                     <label for="precio">Precio:</label>
-                    <input type="number" step="0.01" class="form-control mb-3" id="precio" name="precio" pattern="[0-9]+(\[0-9]{1,2})?" oninput="this.value = this.value.replace(/-/g, '')" required>
+                    <input type="number" step="0.01" class="form-control mb-3" id="precio" name="precio" pattern="[0-9]+(\.[0-9]{1,2})?" oninput="this.value = this.value.replace(/-/g, '')" required>
                 </div>
 
                 <div class="form-group">

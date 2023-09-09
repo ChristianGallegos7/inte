@@ -53,7 +53,7 @@
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <?php
             require("../conexion.php");
-            $sql = "SELECT * FROM Menu WHERE Nombre = 'KFC'"; // Cambia 1 por el ID del local que desees mostrar
+            $sql = "SELECT * FROM Menu WHERE local_id = 4"; // Cambia 1 por el ID del local que desees mostrar
             $result = $conn->query($sql);
 
             while ($row = $result->fetch_assoc()) {

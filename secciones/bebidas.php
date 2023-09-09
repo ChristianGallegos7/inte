@@ -26,7 +26,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light  p-3">
             <div class="container-fluid">
-                <h1><a class="navbar-brand titulo" href="#">KFC</a></h1>
+                <h1><a class="navbar-brand titulo" href="#">BEBIDAS</a></h1>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -53,7 +53,7 @@
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <?php
             require("../conexion.php");
-            $sql = "SELECT * FROM Menu WHERE Nombre = 'BEBIDAS'"; // Cambia 1 por el ID del local que desees mostrar
+            $sql = "SELECT * FROM Menu WHERE local_id = 6";
             $result = $conn->query($sql);
 
             while ($row = $result->fetch_assoc()) {
