@@ -7,13 +7,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_producto = mysqli_real_escape_string($conn, $_POST["plato_id"]);
     $nombre_producto = mysqli_real_escape_string($conn, $_POST["nombre"]);
     $descripcion_producto = mysqli_real_escape_string($conn, $_POST["descripcion"]);
-    $precio = mysqli_real_escape_string($conn, $_POST["precio"]);
     $local = mysqli_real_escape_string($conn, $_POST["local_id"]);
+    $precio = mysqli_real_escape_string($conn, $_POST["precio"]);
+    // Obtener el precio como una cadena
+    $precio = $_POST["precio"];
 
+    // Convertir la cadena a un número decimal
+    $precio_decimal = number_format((float)$precio, 2, '.', '');
     // Actualizar los datos del producto en la base de datos
     $query = "UPDATE menu SET nombre = ?, descripcion = ?, precio = ?, local_id = ? WHERE plato_id = ?";
     $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "ssiii", $nombre_producto, $descripcion_producto, $precio, $local, $id_producto);
+    mysqli_stmt_bind_param($stmt, "ssdsi", $nombre_producto, $descripcion_producto, $precio_decimal, $local, $id_producto);
     mysqli_stmt_execute($stmt);
 
     // Verificar si se ha seleccionado una nueva imagen para el producto
@@ -105,7 +109,7 @@ $resultado = mysqli_query($conn, $query);
                 </div> -->
                 <div class="form-group">
                     <label for="precio">Precio:</label>
-                    <input type="number" step=".01" class="form-control" id="precio" name="precio" value="<?php echo $producto["precio"]; ?>">
+                    <input type="number" step="0.01" class="form-control" id="precio" name="precio" value="<?php echo $producto["precio"]; ?>">
                 </div>
                 <div class="form-group">
                     <label for="local_id">Local:</label>

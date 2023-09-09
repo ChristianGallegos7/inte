@@ -83,10 +83,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
 
     <main class="py-5">
         <div class="container container2 d-flex flex-column align-items-center justify-content-center">
-            <h1 class="text-center text-white tarjeta">BIENVENIDO A FOODies
+            <h2 class="text-center text-white tarjeta p-3">BIENVENIDO A FOODies
                 <img src="images/hamburguesa.png" alt="Logo" height="50px">
 
-            </h1>
+            </h2>
 
 
             <div class="tarjeta p-4 text-white" style="min-width: 450px;">
