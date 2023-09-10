@@ -48,13 +48,7 @@
             <h1 class="text-center">Carrito de compras</h1>
             <table class="table">
                 <thead>
-                    <tr>
-                        <!-- <th>Producto</th>
-                        <th>Cantidad</th>
-                        <th>Precio unitario</th>
-                        <th>Precio total</th>
-                        <th>Acciones</th> -->
-                    </tr>
+
                 </thead>
                 <tbody id="cart-items">
                     <?php
@@ -73,15 +67,23 @@
                         </tr>';
                         // var_dump($_SESSION['carrito']);
 
-                        foreach ($_SESSION['carrito'] as $producto) {
+                        foreach ($_SESSION['carrito'] as $key => $producto) {
                             $subtotal = $producto['cantidad'] * $producto['precio'];
                             echo "<tr>
-                            <td>{$producto['nombre_producto']}</td>
-                            <td>{$producto['cantidad']}</td>
-                            <td>$" . number_format($producto['precio'], 2) . "</td>
-                            <td>$" . number_format($subtotal, 2) . "</td>
-                            <td> <button> </td>
-                            </tr>";
+                                    <td>{$producto['nombre_producto']}</td>
+                                    <td>
+                                        <button class='btn btn-sm btn-success' onclick='aumentarCantidad($key)'>+</button>
+                                        <span id='quantity-$key'>{$producto['cantidad']}</span>
+
+                                        <button class='btn btn-sm btn-danger' onclick='disminuirCantidad($key)'>-</button>
+                                    </td>
+                                    <td>$" . number_format($producto['precio'], 2) . "</td>
+                                    <td>$" . number_format($subtotal, 2) . "</td>
+                                    <td>
+                                        <button class='btn btn-danger' onclick='eliminarProducto($key)' data-product-id='$key'>Eliminar</button>
+                                    </td>
+
+                                </tr>";
                         }
                     }
                     ?>
@@ -91,9 +93,15 @@
             <!-- <div class="d-flex justify-content-end">
                 <h4> Total: $<span id="cart-total"><?php echo number_format($total, 2); ?></span></h4>
             </div> -->
-            <a name="pagar" id="pagar" class="btn btn-primary" href="#" role="button">PAGAR</a>
-            <a name="pagar" id="comprar" class="btn btn-primary" href="local.php" role="button">SEGUIR COMPRANDO</a>
-            <button class="btn btn-danger" id="vaciar-carrito">Vaciar Carrito</button>
+            <div class="fixed-bottom bg-light p-3">
+                <div class="container">
+                    <div class="">
+                        <a name="pagar" id="pagar" class="btn btn-primary" href="#" role="button">PAGAR</a>
+                        <a name="pagar" id="comprar" class="btn btn-primary" href="local.php" role="button">SEGUIR COMPRANDO</a>
+                        <button class="btn btn-danger" id="vaciar-carrito">Vaciar Carrito</button>
+                    </div>
+                </div>
+            </div>
 
 
         </div>
@@ -108,6 +116,55 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
     </script>
     <script>
+        function disminuirCantidad(productId) {
+            // Realiza una solicitud AJAX para actualizar la cantidad en el servidor
+            fetch('actualizar-carrito.php', {
+                    method: "POST",
+                    body: JSON.stringify({
+                        productId,
+                        action: 'decrease'
+                    }), // Envía el ID del producto y la acción
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.text())
+                .then(data => {
+                    // Actualiza la cantidad en la tabla
+                    const quantitySpan = document.querySelector(`#quantity-${productId}`);
+                    const newQuantity = parseInt(quantitySpan.textContent) - 1;
+                    quantitySpan.textContent = newQuantity;
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        }
+
+        function aumentarCantidad(productId) {
+            // Realiza una solicitud AJAX para actualizar la cantidad en el servidor
+            fetch('actualizar-carrito.php', {
+                    method: "POST",
+                    body: JSON.stringify({
+                        productId,
+                        action: 'increase'
+                    }), // Envía el ID del producto y la acción
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.text())
+                .then(data => {
+                    // Actualiza la cantidad en la tabla
+                    const quantitySpan = document.querySelector(`#quantity-${productId}`);
+                    const newQuantity = parseInt(quantitySpan.textContent) + 1;
+                    quantitySpan.textContent = newQuantity;
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        }
+
+
         document.addEventListener("DOMContentLoaded", function() {
             const vaciarCarritoButton = document.getElementById('vaciar-carrito');
             const cartItemsTableBody = document.getElementById('cart-items');
@@ -150,6 +207,59 @@
                     actualizarEstadoPagarButton();
                 }
             });
+
+            function aumentarCantidad(productId) {
+                // Realiza una solicitud AJAX para actualizar la cantidad en el servidor
+                fetch('actualizar-carrito.php', {
+                        method: "POST",
+                        body: JSON.stringify({
+                            productId,
+                            action: 'increase'
+                        }), // Envía el ID del producto y la acción
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        // Actualiza la cantidad en la tabla
+                        const quantityCell = document.querySelector(`#product-quantity-${productId}`);
+                        const newQuantity = parseInt(quantityCell.textContent) + 1;
+                        quantityCell.textContent = newQuantity;
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
+            }
+
+
+
+            function eliminarProducto(productId) {
+                if (confirm('¿Estás seguro de que deseas eliminar este producto del carrito?')) {
+                    // Eliminar el producto de la tabla
+                    const productRow = document.querySelector(`tr[data-product-id='${productId}']`);
+                    productRow.remove();
+
+                    // Realizar una solicitud AJAX para eliminar el producto de la sesión en el servidor
+                    fetch('eliminar-producto.php', {
+                            method: "POST",
+                            body: JSON.stringify({
+                                productId,
+                            }),
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+                            alert('El producto ha sido eliminado del carrito.');
+                            actualizarEstadoPagarButton();
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                        });
+                }
+            }
         });
     </script>
 
