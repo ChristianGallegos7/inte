@@ -1,6 +1,6 @@
 <?php
+session_start();
 ?>
-
 <!doctype html>
 <html lang="en">
 
@@ -52,7 +52,7 @@
                 </thead>
                 <tbody id="cart-items">
                     <?php
-                    session_start();
+                    // session_start();
                     // var_dump($_SESSION['carrito']); // Muestra el contenido del carrito
 
                     if (!isset($_SESSION['carrito']) || empty($_SESSION['carrito'])) {

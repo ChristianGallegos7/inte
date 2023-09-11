@@ -52,6 +52,7 @@
 
 
                 <?php
+                session_start();
                 require("../conexion.php");
                 $sql = "SELECT * FROM local";
                 $result = $conn->query($sql);
@@ -71,6 +72,10 @@
                     echo '</div>';
                 }
 
+                // if (isset($_SESSION['carrito'])) {
+                //     unset($_SESSION['carrito']); // Elimina el carrito
+                // }
+                // session_destroy();
 
                 ?>
 

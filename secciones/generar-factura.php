@@ -1,3 +1,61 @@
+<?php
+session_start();
+require_once('../TCPDF-main/tcpdf.php'); // Asegúrate de proporcionar la ruta correcta al archivo tcpdf.php
+
+// Crear una instancia de TCPDF
+$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+// Establecer información del documento
+$pdf->SetCreator('Nombre del creador');
+$pdf->SetAuthor('Nombre del autor');
+$pdf->SetTitle('Factura de Compra');
+$pdf->SetSubject('Factura de Compra');
+$pdf->SetKeywords('Factura, Compra, TCPDF, PHP');
+
+// Establecer márgenes
+$pdf->SetMargins(10, 10, 10);
+
+// Agregar una página
+$pdf->AddPage();
+// Agregar contenido al PDF (puedes personalizar esto según tus necesidades)
+$pdf->SetFont('dejavusans', '', 12);
+$pdf->Cell(0, 10, 'Factura de Compra', 0, 1, 'C');
+$pdf->Ln(10);
+
+// Agregar tabla con los detalles de la factura
+$pdf->SetFont('dejavusans', 'B', 12);
+$pdf->Cell(60, 10, 'Producto', 1); // Ancho de la columna de Producto
+$pdf->Cell(25, 10, 'Cantidad', 1); // Ancho de la columna de Cantidad
+$pdf->Cell(40, 10, 'Precio Unitario', 1); // Ancho de la columna de Precio Unitario
+$pdf->Cell(40, 10, 'Subtotal', 1); // Ancho de la columna de Subtotal
+$pdf->Ln();
+
+// Obtener los detalles de la factura desde la sesión
+foreach ($_SESSION['carrito'] as $producto) {
+    $pdf->SetFont('dejavusans', '', 12);
+    $pdf->Cell(60, 10, $producto['nombre_producto'], 1); // Ancho de la columna de Producto
+    $pdf->Cell(25, 10, $producto['cantidad'], 1); // Ancho de la columna de Cantidad
+    $pdf->Cell(40, 10, '$' . $producto['precio'], 1); // Ancho de la columna de Precio Unitario
+    $pdf->Cell(40, 10, '$' . ($producto['cantidad'] * $producto['precio']), 1); // Ancho de la columna de Subtotal
+    $pdf->Ln();
+}
+
+// Mostrar el total
+$pdf->Cell(130, 10, 'Total a pagar:', 1);
+// $pdf->Cell(30, 10, '$' . $totalPedido, 1);
+// Nombre del archivo PDF en el servidor
+$nombreArchivoPDF = __DIR__ . '/pdfs/mi_pdf.pdf';
+
+
+// Guardar el PDF en el servidor
+$pdf->Output($nombreArchivoPDF, 'F');
+
+
+// Redirigir al usuario a la página de confirmación
+// header('Location: pagina-confirmacion-pedido.php');
+// exit;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -105,13 +163,13 @@
     <div class="container">
         <h1 class="my-4">Factura de Compra</h1>
         <?php
-        session_start();
+        // session_start();
 
-        if (!isset($_SESSION['carrito']) || empty($_SESSION['carrito'])) {
-            // Redirige o muestra un mensaje de que el carrito está vacío
-            header('Location: pagina-carrito-vacia.php');
-            exit;
-        }
+        // if (!isset($_SESSION['carrito']) || empty($_SESSION['carrito'])) {
+        //     // Redirige o muestra un mensaje de que el carrito está vacío
+        //     // header('Location: pagina-carrito-vacia.php');
+        //     exit;
+        // }
 
         $servername = "localhost";
         $username = "root";
@@ -155,6 +213,14 @@
             $stmt->execute();
 
             $conn->commit();
+            // Actualiza el estado del pedido como "En proceso"
+            $stmt = $conn->prepare("UPDATE Pedidos SET estado = 'En proceso' WHERE pedido_id = ?");
+            $stmt->bind_param("i", $pedidoId);
+            $stmt->execute();
+
+            // Redirige al usuario a la página de confirmación
+            // header('Location: pagina-confirmacion-pedido.php');
+            // exit;
         }
         ?>
         <table class="table table-bordered">
@@ -228,9 +294,10 @@
                 <button type="submit" class="btn btn-primary">Pagar</button>
 
             </form>
-        </div>
-    </div>
 
+        </div>
+
+    </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"></script>
     <script>
@@ -320,6 +387,21 @@
                     event.preventDefault(); // Evita el envío del formulario
                     return;
                 }
+            });
+        });
+        // Coloca este código al final de tu página antes del cierre de </body>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector("form");
+
+            form.addEventListener("submit", function(event) {
+                // Evita que el formulario se envíe automáticamente
+                event.preventDefault();
+
+                // Simula el proceso de pago (puedes agregar tu lógica de pago aquí)
+                // ...
+
+                // Después de que se complete el pago, redirige al usuario a la página de confirmación
+                window.location.href = "pagina-confirmacion-pedido.php";
             });
         });
     </script>

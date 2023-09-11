@@ -30,7 +30,7 @@ $resultado = mysqli_query($conn, $query);
             <div class="nav navbar-nav">
                 <a class="nav-item nav-link" href="http://localhost/dashboard/inte/admin/index.php">Admin</a>
                 <a class="nav-item nav-link" href="#"></a>
-                <a class="nav-item nav-link active btn btn-success text-white" href="#" aria-current="page">Agregar productos <span class="visually-hidden">(current)</span></a>
+                <!-- <a class="nav-item nav-link active btn btn-success text-white" href="#" aria-current="page">Agregar productos <span class="visually-hidden">(current)</span></a> -->
             </div>
         </nav>
         <!-- </div> -->

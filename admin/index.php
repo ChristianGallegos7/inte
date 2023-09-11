@@ -24,6 +24,7 @@
                 <a class="nav-item nav-link btn btn-info p-3" href="#">Admin</a>
                 <a class="nav-item nav-link active btn btn-success text-white p-3" href="./productos/crear.php" aria-current="page">Agregar Productos <span class="visually-hidden">(current)</span></a>
                 <a class="nav-item nav-link active btn btn-success text-white p-3" href="./empleados/index.php" aria-current="page">Empleados <span class="visually-hidden">(current)</span></a>
+                <a class="nav-item nav-link active btn btn-warning text-white p-3" href="./pedidos/index.php" aria-current="page">Pedidos✅ <span class="visually-hidden">(current)</span></a>
                 <!-- <a class="nav-item nav-link active btn btn-warning text-white p-3" href="./locales/crear.php" aria-current="page">Agregar Locales <span class="visually-hidden">(current)</span></a> -->
                 <!-- <a class="nav-item nav-link active btn btn-info text-white p-3" href="./locales/index.php" aria-current="page"> Lista Locales <span class="visually-hidden">(current)</span></a> -->
                 <a class="nav-item nav-link btn btn-danger text-white mx-3 p-3" href="http://localhost/dashboard/inte/">Salir</a>

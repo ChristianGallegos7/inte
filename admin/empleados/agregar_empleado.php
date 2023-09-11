@@ -30,8 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["agregar_empleado"])) {
     }
 }
 ?>
-
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -46,44 +45,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["agregar_empleado"])) {
 
 <body>
     <header>
-        <!-- place navbar here -->
+        <!-- Navbar here -->
     </header>
     <main class="container mt-4">
-        <h2>Agregar Nuevo Empleado</h2>
+        <h2 class="mb-4">Agregar Nuevo Empleado</h2>
         <form method="POST" action="agregar_empleado.php">
-            <label for="nombre_empleado">Nombre:</label>
-            <input type="text" name="nombre_empleado" required>
-            <br>
-            <label for="email_empleado">Correo Electrónico:</label>
-            <input type="email" name="email_empleado" required>
-            <br>
-            <label for="password_empleado">Contraseña:</label>
-            <input type="password" name="password_empleado" required>
-            <br>
-            <label for="rol_empleado">Rol:</label>
-            <input type="text" name="rol_empleado" required>
-            <br>
-            <label for="local_empleado">Local:</label>
-            <select name="local_empleado" required>
-                <option value="">Seleccionar Local</option>
-                <?php
-                // Consulta para obtener la lista de locales
-                $queryLocales = "SELECT id_local, Nombre FROM Local";
-                $resultLocales = mysqli_query($conn, $queryLocales);
+            <div class="mb-3">
+                <label for="nombre_empleado" class="form-label">Nombre:</label>
+                <input type="text" name="nombre_empleado" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="email_empleado" class="form-label">Correo Electrónico:</label>
+                <input type="email" name="email_empleado" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="password_empleado" class="form-label">Contraseña:</label>
+                <input type="password" name="password_empleado" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="rol_empleado" class="form-label">Rol:</label>
+                <input type="text" name="rol_empleado" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="local_empleado" class="form-label">Local:</label>
+                <select name="local_empleado" class="form-select" required>
+                    <option value="">Seleccionar Local</option>
+                    <?php
+                    // Consulta para obtener la lista de locales
+                    $queryLocales = "SELECT id_local, Nombre FROM Local";
+                    $resultLocales = mysqli_query($conn, $queryLocales);
 
-                // Genera opciones para cada local
-                while ($rowLocal = mysqli_fetch_assoc($resultLocales)) {
-                    echo '<option value="' . $rowLocal["id_local"] . '">' . $rowLocal["Nombre"] . '</option>';
-                }
-                ?>
-            </select>
-            <br>
-            <input type="submit" name="agregar_empleado" value="Agregar Empleado">
+                    // Genera opciones para cada local
+                    while ($rowLocal = mysqli_fetch_assoc($resultLocales)) {
+                        echo '<option value="' . $rowLocal["id_local"] . '">' . $rowLocal["Nombre"] . '</option>';
+                    }
+                    ?>
+                </select>
+            </div>
+            <button type="submit" name="agregar_empleado" class="btn btn-primary">Agregar Empleado</button>
+            <a href="index.php" name="cancelar" class="btn btn-primary">Cancelar</a>
+
         </form>
     </main>
 
     <footer>
-        <!-- place footer here -->
+        <!-- Footer here -->
     </footer>
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
