@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 session_start();
 
@@ -28,6 +28,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Devuelve una respuesta (puede ser JSON o texto, dependiendo de tu preferencia)
-    echo "Cantidad actualizada correctamente.";
+    // Recalcula el subtotal y el total
+    $subtotal = 0;
+    foreach ($_SESSION['carrito'] as $producto) {
+        $subtotal += $producto['cantidad'] * $producto['precio'];
+    }
+    $total = $subtotal; // Puedes agregar impuestos u otros costos adicionales aquí si es necesario
+
+    // Devuelve una respuesta JSON con el subtotal y el total actualizados
+    echo json_encode(array(
+        'subtotal' => $subtotal,
+        'total' => $total
+    ));
 }

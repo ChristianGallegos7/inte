@@ -141,6 +141,8 @@ session_start();
                         // Actualiza la cantidad en la tabla
                         currentQuantity--; // Disminuye la cantidad en 1
                         quantitySpan.textContent = currentQuantity;
+
+
                     })
                     .catch(error => {
                         console.error("Error:", error);
