@@ -41,9 +41,13 @@
         }
 
         .tarjeta-credito .chip {
+            background-image: url('../images/chip.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
             width: 60px;
             height: 40px;
-            background-color: #fff;
+            background-color: #007bff;
             border-radius: 8px;
             margin-bottom: 20px;
         }
@@ -195,7 +199,7 @@
                         <div class="datos">
                             <div class="grupo">
                                 <label for="nombre-tarjeta">Nombre en la Tarjeta:</label>
-                                <input type="text" id="nombre-tarjeta" name="nombre-tarjeta" oninput="mayusNameCard()">
+                                <input type="text" id="nombre-tarjeta" name="nombre-tarjeta" oninput="mayusNameCard()" required>
                             </div>
                             <div class="grupo">
                                 <label for="numero-tarjeta">Número de Tarjeta:</label>
@@ -204,24 +208,24 @@
                             <div class="flex">
                                 <div class="grupo mx-3">
                                     <label for="expiracion">Expiración:</label>
-                                    <input type="text" id="expiracion" name="expiracion" placeholder="MM/AA">
+                                    <input type="text" id="expiracion" name="expiracion" placeholder="MM/AA" required>
                                 </div>
                                 <div class="grupo">
                                     <label for="cvv">CVV:</label>
-                                    <input type="text" id="cvv" name="cvv">
+                                    <input type="text" id="cvv" name="cvv" required>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="back">
+                    <!-- <div class="back">
                         <div class="firm">
                             <label for="firma">Firma:</label>
                             <input type="text" id="firma" name="firma">
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <!-- Agrega más campos según tus necesidades -->
-                <button type="button" class="btn btn-primary" onclick="mostrarParteTrasera()">Pagar</button>
+                <button type="submit" class="btn btn-primary">Pagar</button>
 
             </form>
         </div>
@@ -240,10 +244,17 @@
         });
     </script>
     <script>
-        function mostrarParteTrasera() {
-            const tarjetaCredito = document.querySelector('.tarjeta-credito');
-            tarjetaCredito.classList.toggle('mostrar-trasera');
-        }
+        // Agregar una escucha de eventos al campo de expiración
+        const inputExpiracion = document.getElementById("expiracion");
+        inputExpiracion.addEventListener("input", function() {
+            const value = inputExpiracion.value;
+
+            // Comprobar si se han ingresado al menos dos números
+            if (value.length >= 2 && value.indexOf("/") === -1) {
+                // Si hay al menos dos números y no hay "/", agregar "/"
+                inputExpiracion.value = value.slice(0, 2) + "/" + value.slice(2);
+            }
+        });
 
         function mayusNameCard() {
             let nombreCard = document.getElementById("nombre-tarjeta");
@@ -272,6 +283,45 @@
         // Agregar un evento para validar el número de tarjeta en cada entrada del usuario
         const inputNumeroTarjeta = document.getElementById("numero-tarjeta");
         inputNumeroTarjeta.addEventListener("input", validarNumeroTarjeta);
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector("form");
+
+            form.addEventListener("submit", function(event) {
+                const nombreTarjeta = document.getElementById("nombre-tarjeta");
+                const numeroTarjeta = document.getElementById("numero-tarjeta");
+                const expiracion = document.getElementById("expiracion");
+                const cvv = document.getElementById("cvv");
+
+                // Validación del nombre en la tarjeta (solo letras y espacios permitidos)
+                if (!/^[a-zA-Z\s]*$/.test(nombreTarjeta.value)) {
+                    alert("Nombre en la tarjeta no válido.");
+                    event.preventDefault(); // Evita el envío del formulario
+                    return;
+                }
+
+                // // Validación del número de tarjeta (debe ser un número de 16 dígitos)
+                // if (!/^\d{16}$/.test(numeroTarjeta.value)) {
+                //     alert("Número de tarjeta no válido. Deben ser 16 dígitos numéricos.");
+                //     event.preventDefault(); // Evita el envío del formulario
+                //     return;
+                // }
+
+                // Validación de la expiración (formato MM/AA)
+                if (!/^\d{2}\/\d{2}$/.test(expiracion.value)) {
+                    alert("Formato de expiración no válido. Debe ser MM/AA.");
+                    event.preventDefault(); // Evita el envío del formulario
+                    return;
+                }
+
+                // Validación del CVV (debe ser un número de 3 o 4 dígitos)
+                if (!/^\d{3,4}$/.test(cvv.value)) {
+                    alert("CVV no válido. Debe ser un número de 3 o 4 dígitos.");
+                    event.preventDefault(); // Evita el envío del formulario
+                    return;
+                }
+            });
+        });
     </script>
 
 
