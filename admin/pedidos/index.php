@@ -11,7 +11,12 @@ if ($conn->connect_error) {
     die("Conexión fallida: " . $conn->connect_error);
 }
 
-$sql = "SELECT * FROM Pedidos WHERE estado = 'En proceso'";
+$sql = "SELECT p.pedido_id, p.fecha_pedido, p.estado, m.nombre AS nombre_producto, dp.cantidad
+        FROM Pedidos p
+        LEFT JOIN Detalles_Pedido dp ON p.pedido_id = dp.pedido_id
+        LEFT JOIN Menu m ON dp.plato_id = m.plato_id
+        WHERE p.estado = 'En proceso'";
+
 $result = $conn->query($sql);
 ?>
 
@@ -33,9 +38,6 @@ $result = $conn->query($sql);
         <div class="nav navbar-nav gap-4">
             <a class="nav-item nav-link btn btn-info p-3 text-white" href="../index.php">Admin</a>
             <a class="nav-item nav-link btn btn-success p-3 text-white" href="../index.php">Volver</a>
-
-
-            <!-- <a class="nav-item nav-link btn btn-danger text-white mx-3 p-3" href="http://localhost/dashboard/inte/">Salir</a> -->
         </div>
     </nav>
     <div class="container">
@@ -46,6 +48,7 @@ $result = $conn->query($sql);
                     <th>ID de Pedido</th>
                     <th>Fecha de Pedido</th>
                     <th>Estado</th>
+                    <th>Detalles del Producto</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -57,12 +60,28 @@ $result = $conn->query($sql);
                         echo "<td>" . $row["pedido_id"] . "</td>";
                         echo "<td>" . $row["fecha_pedido"] . "</td>";
                         echo "<td>" . $row["estado"] . "</td>";
+                        echo "<td>";
+
+                        // Mostrar los detalles de los productos del pedido
+                        echo "<ul>";
+                        echo "<li>Nombre del Producto: " . $row["nombre_producto"] . "</li>";
+                        echo "<li>Cantidad: " . $row["cantidad"] . "</li>";
+
+                        // Mostrar la imagen del producto
+                        echo "<li>Imagen del Producto: <img src='" . $row["imagen_producto"] . "' alt='Imagen del Producto' width='100'></li>";
+
+                        // Puedes agregar más detalles aquí si es necesario
+                        echo "</ul>";
+
+                        echo "</td>";
                         echo '<td><a href="marcar-completado.php?id=' . $row["pedido_id"] . '">Marcar Completado</a></td>';
                         echo "</tr>";
                     }
                 } else {
-                    echo "<tr><td colspan='4'>No hay pedidos pendientes.</td></tr>";
+                    echo "<tr><td colspan='5'>No hay pedidos pendientes.</td></tr>";
                 }
+
+
                 ?>
             </tbody>
         </table>

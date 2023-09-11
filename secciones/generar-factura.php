@@ -4,7 +4,7 @@ require_once('../TCPDF-main/tcpdf.php'); // Asegúrate de proporcionar la ruta c
 
 // Crear una instancia de TCPDF
 $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
+$totalPedido = 0;
 // Establecer información del documento
 $pdf->SetCreator('Nombre del creador');
 $pdf->SetAuthor('Nombre del autor');
@@ -38,11 +38,14 @@ foreach ($_SESSION['carrito'] as $producto) {
     $pdf->Cell(40, 10, '$' . $producto['precio'], 1); // Ancho de la columna de Precio Unitario
     $pdf->Cell(40, 10, '$' . ($producto['cantidad'] * $producto['precio']), 1); // Ancho de la columna de Subtotal
     $pdf->Ln();
+
+    // Calcular el total sumando los subtotales de los productos
+    $totalPedido += ($producto['cantidad'] * $producto['precio']);
 }
 
 // Mostrar el total
 $pdf->Cell(130, 10, 'Total a pagar:', 1);
-// $pdf->Cell(30, 10, '$' . $totalPedido, 1);
+$pdf->Cell(30, 10, '$' . $totalPedido, 1);
 // Nombre del archivo PDF en el servidor
 $nombreArchivoPDF = __DIR__ . '/pdfs/mi_pdf.pdf';
 
