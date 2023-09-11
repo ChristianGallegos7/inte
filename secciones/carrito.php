@@ -96,7 +96,8 @@
             <div class="fixed-bottom bg-light p-3">
                 <div class="container">
                     <div class="">
-                        <a name="pagar" id="pagar" class="btn btn-primary" href="#" role="button">PAGAR</a>
+                        <a name="pagar" id="pagar" class="btn btn-primary" href="generar-factura.php" role="button">PAGAR</a>
+
                         <a name="pagar" id="comprar" class="btn btn-primary" href="local.php" role="button">SEGUIR COMPRANDO</a>
                         <button class="btn btn-danger" id="vaciar-carrito">Vaciar Carrito</button>
                     </div>
