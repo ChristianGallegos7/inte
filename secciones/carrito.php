@@ -112,33 +112,41 @@
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
     </script>
     <script>
         function disminuirCantidad(productId) {
-            // Realiza una solicitud AJAX para actualizar la cantidad en el servidor
-            fetch('actualizar-carrito.php', {
-                    method: "POST",
-                    body: JSON.stringify({
-                        productId,
-                        action: 'decrease'
-                    }), // Envía el ID del producto y la acción
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(response => response.text())
-                .then(data => {
-                    // Actualiza la cantidad en la tabla
-                    const quantitySpan = document.querySelector(`#quantity-${productId}`);
-                    const newQuantity = parseInt(quantitySpan.textContent) - 1;
-                    quantitySpan.textContent = newQuantity;
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                });
+            // Obtén la cantidad actual del producto
+            const quantitySpan = document.querySelector(`#quantity-${productId}`);
+            let currentQuantity = parseInt(quantitySpan.textContent);
+
+            // Asegúrate de que la cantidad no sea menor que 0
+            if (currentQuantity > 0) {
+                // Realiza una solicitud AJAX para actualizar la cantidad en el servidor
+                fetch('actualizar-carrito.php', {
+                        method: "POST",
+                        body: JSON.stringify({
+                            productId,
+                            action: 'decrease'
+                        }), // Envía el ID del producto y la acción
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        // Actualiza la cantidad en la tabla
+                        currentQuantity--; // Disminuye la cantidad en 1
+                        quantitySpan.textContent = currentQuantity;
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
+            }
         }
+
 
         function aumentarCantidad(productId) {
             // Realiza una solicitud AJAX para actualizar la cantidad en el servidor
@@ -163,6 +171,33 @@
                     console.error("Error:", error);
                 });
         }
+
+        function eliminarProducto(productId) {
+            if (confirm('¿Estás seguro de que deseas eliminar este producto del carrito?')) {
+                $.ajax({
+                    url: 'eliminar-producto.php',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: JSON.stringify({
+                        productId,
+                    }),
+                    contentType: 'application/json',
+                    success: function(data) {
+                        if (data.result === 'success') {
+                            alert('El producto ha sido eliminado del carrito.');
+                            // Resto del código para eliminar la fila del producto
+                        } else {
+                            alert('Error al eliminar el producto del carrito.');
+                        }
+                    },
+                    error: function(error) {
+                        console.error("Error:", error);
+                        alert('Error al eliminar el producto del carrito gil de mierda.');
+                    }
+                });
+            }
+        }
+
 
 
         document.addEventListener("DOMContentLoaded", function() {
@@ -207,59 +242,6 @@
                     actualizarEstadoPagarButton();
                 }
             });
-
-            function aumentarCantidad(productId) {
-                // Realiza una solicitud AJAX para actualizar la cantidad en el servidor
-                fetch('actualizar-carrito.php', {
-                        method: "POST",
-                        body: JSON.stringify({
-                            productId,
-                            action: 'increase'
-                        }), // Envía el ID del producto y la acción
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    })
-                    .then(response => response.text())
-                    .then(data => {
-                        // Actualiza la cantidad en la tabla
-                        const quantityCell = document.querySelector(`#product-quantity-${productId}`);
-                        const newQuantity = parseInt(quantityCell.textContent) + 1;
-                        quantityCell.textContent = newQuantity;
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                    });
-            }
-
-
-
-            function eliminarProducto(productId) {
-                if (confirm('¿Estás seguro de que deseas eliminar este producto del carrito?')) {
-                    // Eliminar el producto de la tabla
-                    const productRow = document.querySelector(`tr[data-product-id='${productId}']`);
-                    productRow.remove();
-
-                    // Realizar una solicitud AJAX para eliminar el producto de la sesión en el servidor
-                    fetch('eliminar-producto.php', {
-                            method: "POST",
-                            body: JSON.stringify({
-                                productId,
-                            }),
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                        })
-                        .then(response => response.text())
-                        .then(data => {
-                            alert('El producto ha sido eliminado del carrito.');
-                            actualizarEstadoPagarButton();
-                        })
-                        .catch(error => {
-                            console.error("Error:", error);
-                        });
-                }
-            }
         });
     </script>
 

@@ -6,7 +6,7 @@ if (isset($_POST['productId'])) {
 
     if (isset($_SESSION['carrito'][$productId])) {
         unset($_SESSION['carrito'][$productId]);
-        echo 'Producto eliminado del carrito.';
+        echo 'success'; // Producto eliminado con éxito
     } else {
         echo 'El producto no se encontró en el carrito.';
     }
