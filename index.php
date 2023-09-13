@@ -7,22 +7,25 @@ require_once("conexion.php");
 <html>
 
 <head>
-    <title>Title</title>
+    <title>Bienvenido!</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,700;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,800;1,500;1,600;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="./Gotham Ultra/Gotham Ultra.otf">
 </head>
 
 <style>
 
 </style>
 
-<body>
+<body id="body">
 
     <style>
         .tarjeta {
@@ -38,7 +41,7 @@ require_once("conexion.php");
 
         body {
             height: 100vh;
-            background-image: url('images/main.jpg');
+            background-image: url('images/back.webp');
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
@@ -54,18 +57,27 @@ require_once("conexion.php");
             margin-top: 5px;
             /* Espacio entre las alertas */
         }
+
+        #body {
+            font-family: 'Nunito', sans-serif;
+            font-family: 'Playfair Display', serif;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+        }
     </style>
 
     <main class="py-5">
         <div class="container container2 d-flex flex-column align-items-center justify-content-center">
-            <h2 class="text-center text-white tarjeta p-3">BIENVENIDO A FOODies
-                <img src="images/hamburguesa.png" alt="Logo" height="50px">
+            <img src="images/hamburguesa.png" alt="Logo" height="50px">
+            <h2 class="text-center text-white  p-3">BIENVENIDO A FOODies
 
             </h2>
 
 
             <div class="tarjeta p-4 text-white" style="min-width: 450px;">
-                <h2 class="text-center">Iniciar sesión</h2>
+                <h2 class="text-center mb-3">Iniciar sesión</h2>
                 <form method="POST" action="index.php">
                     <div class="form-group">
                         <label for="email" class="form-label">Correo Electrónico:</label>
@@ -141,9 +153,9 @@ require_once("conexion.php");
                     <br>
                     <input type="submit" class="btn btn-primary btn-block" name="login" value="Iniciar Sesión">
                 </form>
-                <p class="text-center mt-3">¿No tienes una cuenta? <a href="registro.php">Registrarse</a></p>
+                <p class="text-center mt-3">¿No tienes una cuenta? <a href="registro.php" class="btn btn-success text-white">Registrarse</a></p>
                 <div class="text-center">
-                    <strong class="">**Solo disponible en ECUADOR<svg width="30px" height="30px" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+                    <!-- <strong class="">**Solo disponible en ECUADOR<svg width="30px" height="30px" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
                             <path fill="#fcea2b" d="M5 17h62v38H5z" />
                             <path fill="#d22f27" d="M5 45h62v10H5z" />
                             <path fill="#1e50a0" d="M5 36h62v9H5z" />
@@ -155,7 +167,7 @@ require_once("conexion.php");
                             <ellipse cx="36" cy="36" fill="none" stroke="#d22f27" stroke-miterlimit="10" stroke-width="2" rx="4.5" ry="6" />
                             <path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 17h62v38H5z" />
                         </svg>**
-                    </strong>
+                    </strong> -->
                 </div>
 
             </div>

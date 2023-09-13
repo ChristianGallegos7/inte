@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="../css/kfc.css">
 </head>
 
-<body>
+<body id="body">
     <style>
         .carrito {
             margin-left: 50px;
@@ -21,6 +21,13 @@
 
         .container {
             margin-top: 100px;
+        }
+
+        #body {
+            background-image: url('../images/hielo.avif');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
         }
     </style>
     <header>
