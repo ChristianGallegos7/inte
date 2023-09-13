@@ -136,13 +136,22 @@ session_start();
                             'Content-Type': 'application/json'
                         }
                     })
-                    .then(response => response.text())
+                    .then(response => response.json())
                     .then(data => {
                         // Actualiza la cantidad en la tabla
                         currentQuantity--; // Disminuye la cantidad en 1
                         quantitySpan.textContent = currentQuantity;
 
+                        // Agrega console.log para verificar los valores
+                        console.log('Valor del subtotal recibido:', data.subtotal);
 
+                        // Actualiza el subtotal en el frontend con el nuevo valor del servidor
+                        const subtotalSpan = $(`#subtotal-${productId}`);
+                        subtotalSpan.text('$' + data.subtotal.toFixed(2));
+
+                        // También puedes actualizar el total aquí si es necesario
+                        const totalSpan = $('#cart-total');
+                        totalSpan.text('$' + data.total.toFixed(2));
                     })
                     .catch(error => {
                         console.error("Error:", error);
@@ -151,29 +160,39 @@ session_start();
         }
 
 
+
         function aumentarCantidad(productId) {
-            // Realiza una solicitud AJAX para actualizar la cantidad en el servidor
-            fetch('actualizar-carrito.php', {
-                    method: "POST",
-                    body: JSON.stringify({
-                        productId,
-                        action: 'increase'
-                    }), // Envía el ID del producto y la acción
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(response => response.text())
-                .then(data => {
+            // Realiza una solicitud AJAX para actualizar la cantidad en el servidor con jQuery
+            $.ajax({
+                url: 'actualizar-carrito.php',
+                type: 'POST',
+                dataType: 'json',
+                data: JSON.stringify({
+                    productId: productId,
+                    action: 'increase'
+                }),
+                contentType: 'application/json',
+                success: function(data) {
                     // Actualiza la cantidad en la tabla
-                    const quantitySpan = document.querySelector(`#quantity-${productId}`);
-                    const newQuantity = parseInt(quantitySpan.textContent) + 1;
-                    quantitySpan.textContent = newQuantity;
-                })
-                .catch(error => {
+                    const quantitySpan = $(`#quantity-${productId}`);
+                    const newQuantity = parseInt(quantitySpan.text()) + 1;
+                    quantitySpan.text(newQuantity);
+
+                    // Actualiza el subtotal en el frontend con el nuevo valor del servidor
+                    const subtotalSpan = $(`#subtotal-${productId}`);
+                    subtotalSpan.text('$' + data.subtotal.toFixed(2));
+
+                    // Actualiza el total en el frontend
+                    const totalSpan = $('#cart-total');
+                    totalSpan.text('$' + data.total.toFixed(2));
+                },
+                error: function(error) {
                     console.error("Error:", error);
-                });
+                }
+            });
         }
+
+
 
         function eliminarProducto(productId) {
             if (confirm('¿Estás seguro de que deseas eliminar este producto del carrito?')) {

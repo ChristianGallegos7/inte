@@ -11,11 +11,12 @@ if ($conn->connect_error) {
     die("Conexión fallida: " . $conn->connect_error);
 }
 
-$sql = "SELECT p.pedido_id, p.fecha_pedido, p.estado, m.nombre AS nombre_producto, dp.cantidad
+$sql = "SELECT p.pedido_id, p.fecha_pedido, p.estado, m.imagen AS imagen_producto, m.nombre AS nombre_producto, dp.cantidad
         FROM Pedidos p
         LEFT JOIN Detalles_Pedido dp ON p.pedido_id = dp.pedido_id
         LEFT JOIN Menu m ON dp.plato_id = m.plato_id
         WHERE p.estado = 'En proceso'";
+
 
 $result = $conn->query($sql);
 ?>
@@ -68,7 +69,9 @@ $result = $conn->query($sql);
                         echo "<li>Cantidad: " . $row["cantidad"] . "</li>";
 
                         // Mostrar la imagen del producto
-                        echo "<li>Imagen del Producto: <img src='" . $row["imagen_producto"] . "' alt='Imagen del Producto' width='100'></li>";
+                        // Mostrar la imagen del producto
+                        echo '<li>Imagen del Producto: <img src="data:image/jpeg;base64,' . base64_encode($row["imagen_producto"]) . '" alt="Imagen del Producto" width="100"></li>';
+
 
                         // Puedes agregar más detalles aquí si es necesario
                         echo "</ul>";
