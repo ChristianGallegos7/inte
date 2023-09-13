@@ -24,7 +24,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
             header("Location: admin/index.php");
             exit;
         } else {
-            echo "Contraseña incorrecta para el administrador.";
+            echo '<div class="alert alert-danger d-none alerta" id="adminAlert">
+                    Contraseña incorrecta
+                </div>';
         }
     } else {
         // Si no se encuentra un administrador, verifica el inicio de sesión del cliente
@@ -39,7 +41,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
                 header("Location: secciones/local.php"); // Redirige al usuario a la página principal del cliente
                 exit;
             } else {
-                echo "Contraseña incorrecta para el cliente.";
+                echo '<div class="alert alert-danger alerta" id="clientAlert">
+                        Contraseña incorrecta               
+                    </div>';
             }
         } else {
             echo "Usuario no encontrado.";
@@ -136,17 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
                         </svg>**
                     </strong>
                 </div>
-                <?php if (isset($error)) { ?>
-                    <div id="alert" class="alert alert-danger mt-3">
-                        <?php echo $error; ?>
-                    </div>
-                    <script>
-                        //oculta la alerta
-                        setTimeout(() => {
-                            document.getElementById("alert").classList.add("d-none");
-                        }, 2000);
-                    </script>
-                <?php } ?>
+
             </div>
         </div>
     </main>
@@ -155,6 +149,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     <script>
         const showPasswordBtn = document.getElementById("showPasswordBtn");
         const passwordInput = document.getElementById("password");
+        // Función para ocultar la alerta después de 2 segundos
+        function ocultarAlerta(alertId) {
+            const alert = document.getElementById(alertId);
+            if (alert) {
+                setTimeout(function() {
+                    alert.classList.add("d-none");
+                }, 2000);
+            }
+        }
+
+        // Llama a la función para ocultar las alertas después de 2 segundos
+        ocultarAlerta("adminAlert");
+        ocultarAlerta("clientAlert");
+
 
         showPasswordBtn.addEventListener("click", function() {
             if (passwordInput.type === "password") {

@@ -236,8 +236,18 @@ session_start();
                 }
             }
 
+            // Función para habilitar o deshabilitar el botón "Vaciar Carrito"
+            function actualizarEstadoVaciarCarritoButton() {
+                if (cartItemsTableBody.children.length > 0) {
+                    vaciarCarritoButton.removeAttribute('disabled'); // Habilitar el botón
+                } else {
+                    vaciarCarritoButton.setAttribute('disabled', 'true'); // Deshabilitar el botón
+                }
+            }
+
             // Verificar el estado del carrito al cargar la página
             actualizarEstadoPagarButton();
+            actualizarEstadoVaciarCarritoButton(); // Llama a esta función al cargar la página
 
             vaciarCarritoButton.addEventListener('click', function() {
                 if (confirm('¿Estás seguro de que deseas vaciar el carrito?')) {
@@ -262,6 +272,9 @@ session_start();
 
                     // Actualizar el estado del botón "PAGAR" después de vaciar el carrito
                     actualizarEstadoPagarButton();
+
+                    // Actualizar el estado del botón "Vaciar Carrito" después de vaciar el carrito
+                    actualizarEstadoVaciarCarritoButton();
                 }
             });
         });

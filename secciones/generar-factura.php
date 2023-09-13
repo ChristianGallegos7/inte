@@ -243,7 +243,7 @@ $pdf->Output($nombreArchivoPDF, 'F');
                     echo "<td>{$producto['nombre_producto']}</td>";
                     echo "<td>{$producto['cantidad']}</td>";
                     echo "<td>{$producto['precio']}</td>";
-                    echo "<td>" . ($producto['cantidad'] * $producto['precio']) . "</td>";
+                    echo "<td>" . ($producto['cantidad'] * $producto['precio']) . " $" . "</td>";
                     echo "</tr>";
                 }
                 ?>
