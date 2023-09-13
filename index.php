@@ -1,55 +1,6 @@
 <?php
 session_start();
 require_once("conexion.php");
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
-    $email = $_POST["email"];
-    $password = $_POST["password"];
-
-    // Consulta la base de datos para verificar las credenciales del usuario
-    $sql = "SELECT * FROM Empleados WHERE email = '$email' AND rol = 'admin'";
-    $result = $conn->query($sql);
-
-    if ($result->num_rows == 1) {
-        $row = $result->fetch_assoc();
-        $hashed_password = $row["password"];
-
-        // Verifica la contraseña
-        if (password_verify($password, $hashed_password)) {
-            // Inicio de sesión exitoso como administrador, establece las variables de sesión
-            $_SESSION["cliente_id"] = $row["empleado_id"];
-            $_SESSION["rol"] = "admin";
-
-            // Redirigir al panel de administración
-            header("Location: admin/index.php");
-            exit;
-        } else {
-            echo '<div class="alert alert-danger d-none alerta" id="adminAlert">
-                    Contraseña incorrecta
-                </div>';
-        }
-    } else {
-        // Si no se encuentra un administrador, verifica el inicio de sesión del cliente
-        $sql = "SELECT * FROM Clientes WHERE email = '$email'";
-        $result = $conn->query($sql);
-
-        if ($result->num_rows == 1) {
-            $row = $result->fetch_assoc();
-            if (password_verify($password, $row["password"])) {
-                // Inicio de sesión exitoso para el cliente, establece las variables de sesión
-                $_SESSION["cliente_id"] = $row["cliente_id"];
-                header("Location: secciones/local.php"); // Redirige al usuario a la página principal del cliente
-                exit;
-            } else {
-                echo '<div class="alert alert-danger alerta" id="clientAlert">
-                        Contraseña incorrecta               
-                    </div>';
-            }
-        } else {
-            echo "Usuario no encontrado.";
-        }
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -92,6 +43,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
             background-repeat: no-repeat;
             background-size: cover;
         }
+
+        #passwordAlerts {
+            margin-top: 5px;
+            /* Espacio entre el campo de contraseña y las alertas */
+        }
+
+        /* Estilos adicionales para las alertas */
+        .alerta {
+            margin-top: 5px;
+            /* Espacio entre las alertas */
+        }
     </style>
 
     <main class="py-5">
@@ -117,10 +79,65 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
                         <div class="d-flex align-items-center">
                             <input type="password" class="form-control mb-3" id="password" name="password" required>
                             <img src="./images/lock.png" id="showPasswordBtn" alt="avatar" class="avatar mb-3 mx-2" width="30px">
+                        </div>
+                        <!-- Contenedor para las alertas -->
+                        <div id="passwordAlerts">
+                            <?php
+                            if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
+                                $email = $_POST["email"];
+                                $password = $_POST["password"];
 
-                            <!-- <button type="button" id="showPasswordBtn">Mostrar</button> -->
+                                // Consulta la base de datos para verificar las credenciales del usuario
+                                $sql = "SELECT * FROM Empleados WHERE email = '$email' AND rol = 'admin'";
+                                $result = $conn->query($sql);
+
+                                if ($result->num_rows == 1) {
+                                    $row = $result->fetch_assoc();
+                                    $hashed_password = $row["password"];
+
+                                    // Verifica la contraseña
+                                    if (password_verify($password, $hashed_password)) {
+                                        // Inicio de sesión exitoso como administrador, establece las variables de sesión
+                                        $_SESSION["cliente_id"] = $row["empleado_id"];
+                                        $_SESSION["rol"] = "admin";
+
+                                        // Redirigir al panel de administración
+                                        header("Location: admin/index.php");
+                                        exit;
+                                    } else {
+                                        echo '<div class="alert alert-danger d-none alerta" id="adminAlert">
+                                                Contraseña incorrecta
+                                            </div>';
+                                    }
+                                } else {
+                                    // Si no se encuentra un administrador, verifica el inicio de sesión del cliente
+                                    $sql = "SELECT * FROM Clientes WHERE email = '$email'";
+                                    $result = $conn->query($sql);
+
+                                    if ($result->num_rows == 1) {
+                                        $row = $result->fetch_assoc();
+                                        if (password_verify($password, $row["password"])) {
+                                            // Inicio de sesión exitoso para el cliente, establece las variables de sesión
+                                            $_SESSION["cliente_id"] = $row["cliente_id"];
+                                            header("Location: secciones/local.php"); // Redirige al usuario a la página principal del cliente
+                                            exit;
+                                        } else {
+                                            echo '<div class="alert alert-danger d-none alerta" id="clientAlert">
+                                                Datos incorrectos usuario              
+                                            </div>';
+                                        }
+                                    } else {
+                                        echo '<div class="alert alert-danger d-none alerta" id="notFoundAlert">
+                                                Usuario no encontrado
+                                            </div>';
+                                    }
+                                }
+                            }
+                            ?>
                         </div>
                     </div>
+
+
                     <br>
                     <input type="submit" class="btn btn-primary btn-block" name="login" value="Iniciar Sesión">
                 </form>
@@ -149,6 +166,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     <script>
         const showPasswordBtn = document.getElementById("showPasswordBtn");
         const passwordInput = document.getElementById("password");
+        const passwordAlerts = document.getElementById("passwordAlerts"); // Contenedor de alertas
+
+        // Función para mostrar la alerta
+        function mostrarAlerta(alertId) {
+            const alert = document.getElementById(alertId);
+            if (alert) {
+                alert.classList.remove("d-none");
+            }
+        }
+
         // Función para ocultar la alerta después de 2 segundos
         function ocultarAlerta(alertId) {
             const alert = document.getElementById(alertId);
@@ -159,11 +186,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
             }
         }
 
-        // Llama a la función para ocultar las alertas después de 2 segundos
-        ocultarAlerta("adminAlert");
-        ocultarAlerta("clientAlert");
-
-
         showPasswordBtn.addEventListener("click", function() {
             if (passwordInput.type === "password") {
                 passwordInput.type = "text";
@@ -173,7 +195,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
                 showPasswordBtn.textContent = "Mostrar";
             }
         });
+
+        // Llama a la función para ocultar las alertas después de 2 segundos
+        mostrarAlerta("adminAlert");
+        ocultarAlerta("adminAlert");
+
+        // Llama a la función para ocultar las alertas después de 2 segundos
+        mostrarAlerta("clientAlert");
+        ocultarAlerta("clientAlert");
     </script>
+
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
     </script>
