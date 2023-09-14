@@ -29,6 +29,8 @@
         <table class="table">
             <thead>
                 <tr>
+                    <th>ID EMPLEADO</th>
+
                     <th>Nombre</th>
                     <th>Correo Electrónico</th>
                     <th>Rol</th>
@@ -40,20 +42,20 @@
                 <?php
                 require_once("../../conexion.php");
                 // Modifica la consulta SQL para obtener el nombre del local al que pertenece cada empleado
-                $query = "SELECT e.nombre, e.email, e.rol, l.Nombre as nombre_local FROM Empleados e
-                          INNER JOIN Local l ON e.local_id = l.id_local";
+                $query = "SELECT e.empleado_id, e.nombre, e.email, e.rol, l.Nombre as nombre_local FROM Empleados e
+                INNER JOIN Local l ON e.local_id = l.id_local";
+
                 $result = mysqli_query($conn, $query);
 
                 while ($row = mysqli_fetch_assoc($result)) {
                     echo '<tr>';
-                    echo '<td>' . $row["nombre"] . '</td>';
-                    echo '<td>' . $row["email"] . '</td>';
-                    echo '<td>' . $row["rol"] . '</td>';
-                    echo '<td>' . $row["nombre_local"] . '</td>'; // Muestra el nombre del local
-                    echo '<td>';
-                    echo '<a href="editar_empleado.php?id=ID_EMPLEADO" class="btn btn-primary mx-3">Editar</a>';
-                    echo '<a href="eliminar_empleado.php?id=ID_EMPLEADO" class="btn btn-danger">Eliminar</a>';
-                    echo '</td>';
+                    echo '<td>' . $row['empleado_id'] . '</td>';
+                    echo '<td>' . $row['nombre'] . '</td>';
+                    echo '<td>' . $row['email'] . '</td>';
+                    echo '<td>' . $row['rol'] . '</td>';
+                    echo '<td>' . $row['nombre_local'] . '</td>';
+                    echo '<td><a href="editar_empleado.php?id=' . $row['empleado_id'] . '" class="btn btn-primary">Editar</a></td>';
+                    echo '<td><a href="eliminar_empleado.php?id=' . $row['empleado_id'] . '" class="btn btn-danger">Eliminar</a></td>';
                     echo '</tr>';
                 }
                 ?>
