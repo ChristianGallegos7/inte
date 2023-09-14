@@ -2,14 +2,16 @@
 <html lang="en">
 
 <head>
-    <title>Productos</title>
+    <title>PARRILLADAS</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS v5.2.1 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,700;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,800;1,500;1,600;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/kfc.css">
 </head>
 
@@ -28,6 +30,28 @@
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
+            font-family: 'Nunito', sans-serif;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .card-title {
+            font-weight: 900;
+
+            /* Peso de letra en el título */
+        }
+
+        .card-description {
+            font-weight: bold;
+            /* Peso de letra en la descripción */
+        }
+
+        .card-price {
+            font-weight: bold;
+            /* Peso de letra en el precio */
+        }
+
+        .parri {
+            background-color: black;
         }
     </style>
     <header>
@@ -39,16 +63,20 @@
                 </button>
 
                 <div class="d-flex align-items-center justify-content-center mx-auto">
-                    <a href="carrito.php" class="nav-link carrito"> <img src="../images/carrito.png" alt="CARRITO DE COMPRAS" width="30px" title="Click para ver carrito de compras"> </a>
+                    <a href="carrito.php" class="nav-link carrito"> <svg width="48" height="48" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="176" cy="416" r="32" fill="#ffffff" />
+                            <circle cx="400" cy="416" r="32" fill="#ffffff" />
+                            <path fill="#ffffff" d="M167.78 304h261.34l38.4-192H133.89l-8.47-48H32v32h66.58l48 272H432v-32H173.42l-5.64-32z" />
+                        </svg> </a>
                 </div>
 
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link titulo2" aria-current="page" href="#">Inicio</a>
+                            <!-- <a class="nav-link titulo2" aria-current="page" href="#">Inicio</a> -->
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link titulo2" href="local.php">Regresar a locales🏪</a>
+                            <a class="nav-link titulo2 card-title" href="local.php">Regresar a locales</a>
                         </li>
                     </ul>
                 </div>
@@ -66,12 +94,12 @@
             while ($row = $result->fetch_assoc()) {
                 $precio = $row['precio'];
                 echo '<div class="col">';
-                echo '<div class="card text-center my-3 bg-blue">';
+                echo '<div class="card text-center my-3 bg-blue ">';
                 echo '<img class="card-img-top " height="300px" src="data:image/jpeg;base64,' . base64_encode($row['imagen']) . '" alt="Imagen del producto">';
-                echo '<h5 class="card-title mx-3">' . $row['nombre'] . '</h5>';
+                echo '<h5 class="card-title mx-3 card-title mt-2 ">' . $row['nombre'] . '</h5>';
                 echo '<div class="card-body">';
-                echo '<p class="card-text">' . $row['descripcion'] . '</p>';
-                echo '<p class="card-text">Precio: $' . number_format($precio, 2) . '</p>';
+                echo '<p class="card-text card-description">' . $row['descripcion'] . '</p>';
+                echo '<p class="card-text card-price">Precio: $' . number_format($precio, 2) . '</p>';
 
                 // FORMULARIO
                 echo '<form method="POST">';

@@ -5,3 +5,7 @@
 body {
     background-image: url('../images/fondo.jpeg');
 }
+
+.titulo:hover {
+    color: red;
+}
